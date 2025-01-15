@@ -1,0 +1,88 @@
+# Project properties
+environment: dev
+db: postgres
+
+# Configuración de la base de datos Postgresql
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shop_db
+    username: technologyos
+    password: YXNhbGF6YXJqQGdtYWlsLmNvbToqR
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    data:
+      web:
+        pageable:
+          parameter: p
+          size-parameter: limit
+    defer-datasource-initialization: true
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger/index.html
+    enabled: true
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    healthcheck:
+      enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+    shutdown:
+      enabled: true
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: Employee Microservice
+    description: Application to create and get Employees
+    version: 1.0
+
+endpoint:
+  shutdown:
+    enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+    instances:
+      getEmployeesCB:
+        minimumNumberOfCalls: 7
+        failureRateThreshold: 50
+        waitDurationInOpenState: 20000
+        permittedNumberOfCallsInHalfOpenState: 3
+
+
+environment:
+  mode: local
+
+swagger:
+  server:
+    url: http://localhost:8081

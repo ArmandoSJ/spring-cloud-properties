@@ -1,0 +1,80 @@
+# project properties
+environment: local
+db: h2
+
+# Configuración de JPA
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:h2:mem:product
+    username: test
+    password: test
+    driver-class-name: org.h2.Driver
+# Habilitar consola de H2 para depuración
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger/index.html
+    enabled: true
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    healthcheck:
+      enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+    shutdown:
+      enabled: true
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: Employee Microservice
+    description: Application to create and get Employees
+    version: 1.0
+
+endpoint:
+  shutdown:
+    enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+    instances:
+      getEmployeesCB:
+        minimumNumberOfCalls: 7
+        failureRateThreshold: 50
+        waitDurationInOpenState: 20000
+        permittedNumberOfCallsInHalfOpenState: 3
+
+
+environment:
+  mode: dev
+
+swagger:
+  server:
+    url: http://localhost:8081
