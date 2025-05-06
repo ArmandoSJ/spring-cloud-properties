@@ -1,5 +1,5 @@
 # project properties
-environment: local
+profile: local
 db: h2
 
 # Configuración de JPA
